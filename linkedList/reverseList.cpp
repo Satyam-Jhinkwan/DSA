@@ -1,36 +1,64 @@
 #include <iostream>
+#include <stack>
 using namespace std;
 
-class Node{
+class Node
+{
 public:
     int data;
-    Node* next;
-    Node(int val){
+    Node *next;
+    Node(int val)
+    {
         data = val;
         next = NULL;
     }
 };
 
-void insertAtTail(Node* &head,int val){
-    Node* newNode = new Node(val);
-    if(head == NULL){
+void insertAtTail(Node *&head, int val)
+{
+    Node *newNode = new Node(val);
+    if (head == NULL)
+    {
         head = newNode;
         return;
     }
 
-    Node* temp = head;
-    while(temp->next != NULL){
+    Node *temp = head;
+    while (temp->next != NULL)
+    {
         temp = temp->next;
     }
     temp->next = newNode;
 }
 
-Node* reverseList(Node* head){
-    Node* prev = NULL;
-    Node* curr = head;
-    Node* next = NULL;
+Node *reverseListUsingStack(Node *head) // not preferred
+{
+    Node *temp = head;
+    stack<int> st;
+    while (head != NULL)
+    {
+        st.push(head->data);
+        temp = temp->next;
+    }
 
-    while(curr != NULL){
+    temp = head;
+    while (head != NULL)
+    {
+        temp->data = st.top();
+        st.pop();
+        temp = temp->next;
+    }
+    return head;
+}
+
+Node *reverseList(Node *head)
+{
+    Node *prev = NULL;
+    Node *curr = head;
+    Node *next = NULL;
+
+    while (curr != NULL)
+    {
         next = curr->next;
         curr->next = prev;
         prev = curr;
@@ -40,36 +68,41 @@ Node* reverseList(Node* head){
     return prev;
 }
 
-Node* reverseListRecursive(Node* head){
-    if(head == NULL || head->next == NULL){
+Node *reverseListRecursive(Node *head)
+{
+    if (head == NULL || head->next == NULL)
+    {
         return head;
     }
 
-    Node* newHead = reverseListRecursive(head->next);
+    Node *newHead = reverseListRecursive(head->next);
     head->next->next = head;
     head->next = NULL;
 
     return newHead;
 }
 
-void printList(Node* head){
-    while(head != NULL){
-        cout<< head->data << " -> ";
+void printList(Node *head)
+{
+    while (head != NULL)
+    {
+        cout << head->data << " -> ";
         head = head->next;
     }
-    cout<<"NULL"<<endl;
+    cout << "NULL" << endl;
 }
 
-int main(){
-    Node* head= NULL;
-    insertAtTail(head,1);
-    insertAtTail(head,2);
-    insertAtTail(head,3);
-    insertAtTail(head,4);
-    insertAtTail(head,5);
-    cout<<"Original List : ";
+int main()
+{
+    Node *head = NULL;
+    insertAtTail(head, 1);
+    insertAtTail(head, 2);
+    insertAtTail(head, 3);
+    insertAtTail(head, 4);
+    insertAtTail(head, 5);
+    cout << "Original List : ";
     printList(head);
-    cout<<"Reversed List : ";
+    cout << "Reversed List : ";
     head = reverseListRecursive(head);
     printList(head);
     return 0;
